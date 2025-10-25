@@ -1,0 +1,38 @@
+public class Menu {
+    private String nama;
+    private int harga;
+    private String kategori; // "Makanan" atau "Minuman"
+
+    // Constructor
+    public Menu(String nama, int harga, String kategori) {
+        this.nama = nama;
+        this.harga = harga;
+        this.kategori = kategori;
+    }
+
+    // Getter methods
+    public String getNama() {
+        return nama;
+    }
+
+    public int getHarga() {
+        return harga;
+    }
+
+    public String getKategori() {
+        return kategori;
+    }
+
+    // Setter methods
+    public void setNama(String nama) {
+        this.nama = nama;
+    }
+
+    public void setHarga(int harga) {
+        this.harga = harga;
+    }
+
+    public void setKategori(String kategori) {
+        this.kategori = kategori;
+    }
+}
