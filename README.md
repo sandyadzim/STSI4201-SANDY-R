@@ -1,103 +1,170 @@
-# Tugas 2 STSI4201 - Program Aplikasi Restoran dengan Manajemen Menu
+# Tugas 3 - Manajemen Restoran
 
 ## Deskripsi
-Program Java ini adalah aplikasi restoran lengkap yang memungkinkan pelanggan untuk memesan makanan dan minuman serta pemilik restoran untuk mengelola menu.
+Program ini memungkinkan pengguna untuk mengelola menu restoran dan memproses pesanan pelanggan dengan fitur simpan/muat data dari file.
 
-## Fitur Program
-
-### 1. Menu Pelanggan (Pemesanan)
-- **Input Menu Restoran**: Menyimpan data menu makanan dan minuman dalam ArrayList
-- **Pemesanan Tidak Terbatas**: Pelanggan dapat memesan sebanyak yang diinginkan hingga mengetik 'selesai'
-- **Validasi Input**: Sistem akan terus meminta input jika format salah atau menu tidak ditemukan
-- **Perhitungan Biaya**: 
-  - Subtotal pesanan
-  - Pajak 10%
-  - Biaya pelayanan Rp 20.000
-  - Diskon 10% untuk pembelian > Rp 100.000
-  - Promo beli 1 gratis 1 minuman untuk pembelian > Rp 50.000
-- **Struk Pembayaran**: Menampilkan detail lengkap pesanan dan pembayaran
-
-### 2. Menu Pemilik (Manajemen Menu)
-- **Lihat Daftar Menu**: Menampilkan semua menu yang tersedia
-- **Tambah Menu Baru**: Menambahkan satu atau beberapa menu sekaligus
-- **Ubah Harga Menu**: Mengubah harga menu dengan konfirmasi
-- **Hapus Menu**: Menghapus menu dengan konfirmasi
-- **Validasi Input**: Sistem akan terus meminta input jika pilihan tidak valid
-- **Konfirmasi**: Setiap perubahan/penghapusan memerlukan konfirmasi 'Ya/Tidak'
+---
 
 ## Struktur Kelas
 
-### Kelas Menu
-- **Atribut**: nama, harga, kategori
-- **Method**: Constructor, getter, dan setter
+### 1. **Abstract Class: MenuItem**
+```
+MenuItem (abstract)
+├── Atribut:
+│   ├── private String nama
+│   ├── private double harga
+│   └── private String kategori
+│
+├── Method:
+│   ├── Constructor(nama, harga, kategori)
+│   ├── Getter/Setter untuk semua atribut
+│   ├── abstract void tampilMenu()
+│   └── abstract String toFileString()
+```
 
-### Kelas Main
-- **Data Struktur**: 
-  - `ArrayList<Menu> daftarMenu` - Menyimpan semua menu (dinamis)
-  - `ArrayList<String> namaPesanan` - Menyimpan nama pesanan (tidak terbatas)
-  - `ArrayList<Integer> jumlahPesanan` - Menyimpan jumlah pesanan
-  - `ArrayList<Integer> hargaPesanan` - Menyimpan harga pesanan
+### 2. **Subclass: Makanan**
+```
+Makanan extends MenuItem
+├── Atribut Tambahan:
+│   └── private String jenisMakanan
+│
+├── Method:
+│   ├── Constructor(nama, harga, jenisMakanan)
+│   ├── @Override void tampilMenu()
+│   └── String toFileString()
+```
 
-- **Method Utama**:
-  - `main()` - Entry point dengan menu utama
-  - `tampilkanMenuUtama()` - Menampilkan menu utama aplikasi
-  - `getValidInput()` - Validasi input dengan pilihan tertentu
+### 3. **Subclass: Minuman**
+```
+Minuman extends MenuItem
+├── Atribut Tambahan:
+│   └── private String jenisMinuman
+│
+├── Method:
+│   ├── Constructor(nama, harga, jenisMinuman)
+│   ├── @Override void tampilMenu()
+│   └── String toFileString()
+```
 
-- **Method Pelanggan**:
-  - `menuPelanggan()` - Mengelola alur pemesanan pelanggan
-  - `tampilkanMenu()` - Menampilkan daftar menu berdasarkan kategori
-  - `prosesTempatPesanan()` - Menerima input pesanan
-  - `prosesInputPesanan()` - Memproses setiap input pesanan
-  - `cariMenu()` - Mencari menu berdasarkan nama
-  - `hitungTotalBiaya()` - Menghitung total dengan pajak, diskon, dan promo
-  - `hitungPromoMinuman()` - Menghitung promo minuman
-  - `cetakStruk()` - Mencetak struk pembayaran
+### 4. **Subclass: Diskon**
+```
+Diskon extends MenuItem
+├── Atribut Tambahan:
+│   ├── private double persenDiskon
+│   └── private double hargaAsli
+│
+├── Method:
+│   ├── Constructor(nama, hargaAsli, persenDiskon)
+│   ├── getPersenDiskon()
+│   ├── getHargaAsli()
+│   ├── @Override void tampilMenu()
+│   ├── double getNilaiDiskon()
+│   └── String toFileString()
+```
 
-- **Method Pemilik**:
-  - `menuPemilik()` - Menu manajemen untuk pemilik
-  - `tambahMenu()` - Menambahkan menu baru
-  - `ubahHargaMenu()` - Mengubah harga menu dengan konfirmasi
-  - `hapusMenu()` - Menghapus menu dengan konfirmasi
-  - `tampilkanSemuaMenuBerNomor()` - Menampilkan semua menu dengan nomor
+### 5. **Class: Menu**
+```
+Menu
+├── Atribut:
+│   └── private ArrayList<MenuItem> daftarMenu
+│
+├── Method:
+│   ├── void tambahItem(MenuItem item)
+│   ├── void tampilkanSemuaMenu()
+│   ├── void tampilkanMenuBerNomor()
+│   ├── MenuItem getItem(int index) throws IndexOutOfBoundsException
+│   ├── int getJumlahItem()
+│   ├── void simpanKeFile()
+│   ├── void muatDariFile()
+│   └── void inisialisasiMenuDefault()
+```
 
-- **Helper Method**:
-  - `initializeMenu()` - Inisialisasi data menu awal
-  - `getKategoriMenu()` - Mendapatkan kategori menu
+### 6. **Class: Pesanan**
+```
+Pesanan
+├── Atribut:
+│   ├── private ArrayList<MenuItem> itemPesanan
+│   ├── private ArrayList<Integer> jumlahPesanan
+│   ├── private String namaPelanggan
+│   └── private LocalDateTime waktuPesanan
+│
+### 6. **Class: Pesanan**
+```
+Pesanan
+├── Atribut:
+│   ├── private ArrayList<MenuItem> itemPesanan
+│   ├── private ArrayList<Integer> jumlahPesanan
+│   ├── private String namaPelanggan
+│   └── private LocalDateTime waktuPesanan
+│
+├── Method:
+│   ├── Constructor(namaPelanggan)
+│   ├── void tambahItem(MenuItem, int) throws IllegalArgumentException
+│   ├── double hitungTotal()
+│   ├── double hitungTotalDiskon()
+│   ├── void tampilkanStruk()
+│   ├── void simpanStrukKeFile()
+│   ├── boolean isEmpty()
+│   ├── int getJumlahItem()
+│   └── void reset()
+```
 
-## Menu Restoran (Initial Data)
+### 7. **Main Class**
+```
+Main
+├── Static Variables:
+│   ├── Scanner scanner
+│   ├── Menu menu
+│   └── Pesanan pesananAktif
+│
+├── Method:
+│   ├── main(String[] args)
+│   ├── void tampilkanMenuUtama()
+│   ├── void tambahItemKeMenu()
+│   ├── void terimaPesanan()
+│   ├── void hitungTotalPesanan()
+│   ├── void tampilkanDanSimpanStruk()
+│   ├── boolean keluar()
+│   └── String getValidInput(int max)
+```
 
-### Makanan:
-1. Nasi Padang - Rp 25.000
-2. Mie Goreng - Rp 20.000
-3. Nasi Goreng - Rp 22.000
-4. Ayam Geprek - Rp 23.000
+---
 
-### Minuman:
-1. Es Teh - Rp 5.000
-2. Es Jeruk - Rp 7.000
-3. Jus Alpukat - Rp 12.000
-4. Cappuccino - Rp 15.000
+## Fitur Program
 
+### Menu 1: Tambah Item ke Menu
+- Tambah **Makanan** dengan jenis (Nasi, Mie, Ayam, dll)
+- Tambah **Minuman** dengan jenis (Dingin, Panas, Juice)
+- Tambah **Item Diskon** dengan persentase diskon
+- Validasi input harga dan persentase diskon
+- Auto-save ke file setelah menambah
 
-## Aturan Perhitungan
+### Menu 2: Tampilkan Menu Restoran
+- Menampilkan semua menu dengan **polymorphism**
+- Dikelompokkan: Makanan, Minuman, Promo Spesial
+- Setiap tipe ditampilkan dengan format berbeda
 
-1. **Subtotal** = Σ (Harga × Jumlah) untuk setiap item
-2. **Pajak** = Subtotal × 10%
-3. **Total Sebelum Promo** = Subtotal + Pajak + Biaya Pelayanan (Rp 20.000)
-4. **Promo Minuman** (jika subtotal > Rp 50.000 dan ada minuman dengan jumlah ≥ 2):
-   - Potongan = Harga 1 minuman
-5. **Total Setelah Promo** = Total Sebelum Promo - Potongan Promo
-6. **Diskon 10%** (jika subtotal > Rp 100.000):
-   - Potongan Diskon = Total Setelah Promo × 10%
-7. **Total Akhir** = Total Setelah Promo - Potongan Diskon
+### Menu 3: Terima Pesanan Pelanggan
+- Input nama pelanggan
+- Pilih menu dari daftar bernomor
+- Input jumlah pesanan
+- Pesanan bisa ditambah berkali-kali
 
-## Catatan Implementasi
-- Program menggunakan **ArrayList** untuk mengelola menu dan pesanan (dinamis)
-- Menggunakan **loop (for, while, for-each)** untuk efisiensi dan fleksibilitas
-- Menggunakan **struktur keputusan (if-else, switch-case)** untuk logika aplikasi
-- Pesanan **tidak terbatas** - pelanggan dapat memesan sebanyak yang diinginkan
-- **Validasi input** ketat - sistem akan terus meminta input jika tidak valid
-- **Konfirmasi** untuk setiap perubahan/penghapusan data
-- Format input: "Nama Menu = Jumlah"
-- Promo minuman otomatis diterapkan pada minuman pertama yang jumlahnya ≥ 2
+### Menu 4: Hitung Total Biaya Pesanan
+- Menghitung total dari semua item
+- Otomatis menghitung diskon jika ada item diskon
+- Menampilkan ringkasan pesanan
 
+### Menu 5: Tampilkan & Simpan Struk
+- Tampilkan struk di layar dengan detail lengkap
+- Nilai diskon ditampilkan sebagai total untuk item (nilai per-item × jumlah)
+- Simpan struk ke file dengan format:
+  - `data/struk/struk_[nama]_[timestamp].txt`
+- Detail diskon jika ada dengan breakdown lengkap
+- **Auto-reset pesanan** setelah struk disimpan (siap terima pelanggan baru)
+
+### Menu 6: Keluar
+- Pesan terima kasih
+- Tutup scanner dan keluar dari program
+
+---
