@@ -88,6 +88,8 @@ Pesanan
 │   ├── private String namaPelanggan
 │   └── private LocalDateTime waktuPesanan
 │
+```
+
 ### 6. **Class: Pesanan**
 ```
 Pesanan
